@@ -1,0 +1,9 @@
+*.class
+*.apk
+bin/
+gen/
+.settings/
+proguard/
+*.classpath
+/doExt_do_Easemob/do_build.xml
+/doExt_do_Easemob/libs/docore.jar
