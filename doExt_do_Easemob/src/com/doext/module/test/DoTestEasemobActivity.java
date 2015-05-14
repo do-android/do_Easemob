@@ -42,7 +42,7 @@ public class DoTestEasemobActivity extends DoTestActivity{
 				DoServiceContainer.getLogEngine().writeDebug("IMLogin：" + _data);
 				Map<String, String>  _paras_chat = new HashMap<String, String>();
 				_paras_chat.put("username", "heping");
-				_paras_chat.put("userNickname", "nick");
+				_paras_chat.put("userNickname", "zhuozuoying");
 				//_paras_chat.put("userIcon", "http://downloads.easemob.com/downloads/57.png");
 				//_paras_chat.put("myIcon", "http://zhouzhou.dcdmt.cn/files/UploadImage/20150508/5de7e1c345a44ebeb2c2e9e60de14a2a.jpg");
 				DoService.syncMethod(model, "enterChat", _paras_chat);

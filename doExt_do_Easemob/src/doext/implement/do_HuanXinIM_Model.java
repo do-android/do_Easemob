@@ -11,10 +11,14 @@ import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.Type;
 import com.easemob.util.NetUtils;
 
 import core.DoServiceContainer;
+import core.helper.DoResourcesHelper;
 import core.helper.jsonparse.DoJsonNode;
+import core.interfaces.DoIModuleTypeID;
 import core.interfaces.DoIScriptEngine;
 import core.object.DoInvokeResult;
 import core.object.DoSingletonModule;
@@ -22,6 +26,7 @@ import doext.app.do_HuanXinIM_App;
 import doext.define.do_HuanXinIM_IMethod;
 import doext.easemob.activity.ChatActivity;
 import doext.easemob.domain.User;
+import doext.easemob.util.CommonUtils;
 
 /**
  * 自定义扩展SM组件Model实现，继承DoSingletonModule抽象类，并实现M0005_HuanXinIM_IMethod接口方法；
@@ -183,6 +188,8 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	private class NewMessageBroadcastReceiver extends BroadcastReceiver {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
+	    	
+	    	//abortBroadcast();
 	        //消息id
 	        String msgId = intent.getStringExtra("msgid");
 	        //发消息的人的username(userid)
@@ -192,8 +199,30 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	        int msgType = intent.getIntExtra("type", 0);
 	        Log.d("main", "new message id:" + msgId + " from:" + msgFrom + " type:" + msgType);
 	        //更方便的方法是通过msgId直接获取整个message
-	        //EMMessage message = EMChatManager.getInstance().getMessage(msgId);
-	        getEventCenter().fireEvent("receive", new DoInvokeResult(getUniqueKey()));
+	        EMMessage message = EMChatManager.getInstance().getMessage(msgId);
+	        String ticker = CommonUtils.getMessageDigest(message, context);
+	        String st = context.getResources().getString(DoResourcesHelper.getIdentifier("expression","string", new DoIModuleTypeID() {
+				@Override
+				public String getTypeID() {
+					return do_HuanXinIM_App.getInstance().getModuleTypeID();
+				}
+			}));
+	        if(message.getType() == Type.TXT) {
+	            ticker = ticker.replaceAll("\\[.{2,3}\\]", st);
+	        }
+			try {
+				DoInvokeResult invokeResult = new DoInvokeResult(getUniqueKey());
+				DoJsonNode jsonNode = new DoJsonNode();
+				jsonNode.setOneText("from", message.getFrom());
+				jsonNode.setOneText("nick", message.getStringAttribute("nick",""));
+				jsonNode.setOneText("type", message.getType().toString());
+				jsonNode.setOneText("message", ticker);
+				jsonNode.setOneText("time", message.getMsgTime()+"");
+				invokeResult.setResultNode(jsonNode);
+				getEventCenter().fireEvent("receive", invokeResult);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	    }
 	}
 	

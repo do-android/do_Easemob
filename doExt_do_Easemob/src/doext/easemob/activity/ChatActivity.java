@@ -177,6 +177,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private boolean haveMoreData = true;
 	private Button btnMore;
 	public String playMsgId;
+	private String userNickname;
 
 	private Handler micImageHandler = new Handler() {
 		@Override
@@ -308,7 +309,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 		if (chatType == CHATTYPE_SINGLE) { // 单聊
 			toChatUsername = getIntent().getStringExtra("userId");
-			String userNickname = getIntent().getStringExtra("userNickname");
+			userNickname = getIntent().getStringExtra("userNickname");
 			((TextView) findViewById(DoResourcesHelper.getIdentifier("name","id",this))).setText(userNickname);
 			// conversation =
 			// EMChatManager.getInstance().getConversation(toChatUsername,false);
@@ -634,6 +635,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 		if (content.length() > 0) {
 			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+			message.setAttribute("nick", userNickname);
 			// 如果是群聊，设置chattype,默认是单聊
 			if (chatType == CHATTYPE_GROUP)
 				message.setChatType(ChatType.GroupChat);

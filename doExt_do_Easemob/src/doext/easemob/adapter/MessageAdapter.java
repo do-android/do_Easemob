@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -214,7 +213,6 @@ public class MessageAdapter extends BaseAdapter implements DoIModuleTypeID{
 		}
 	}
 
-	@SuppressLint("NewApi")
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		final EMMessage message = getItem(position);
 		ChatType chatType = message.getChatType();
@@ -481,9 +479,9 @@ public class MessageAdapter extends BaseAdapter implements DoIModuleTypeID{
 		holder.tv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				activity.startActivityForResult(
+			/*	activity.startActivityForResult(
 						(new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-								EMMessage.Type.TXT.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+								EMMessage.Type.TXT.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);*/
 				return true;
 			}
 		});
@@ -535,9 +533,9 @@ public class MessageAdapter extends BaseAdapter implements DoIModuleTypeID{
 		holder.iv.setOnLongClickListener(new OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				activity.startActivityForResult(
+				/*activity.startActivityForResult(
 						(new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-								EMMessage.Type.IMAGE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+								EMMessage.Type.IMAGE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);*/
 				return true;
 			}
 		});
@@ -655,9 +653,9 @@ public class MessageAdapter extends BaseAdapter implements DoIModuleTypeID{
 
 			@Override
 			public boolean onLongClick(View v) {
-				activity.startActivityForResult(
+				/*activity.startActivityForResult(
 						new Intent(activity, ContextMenu.class).putExtra("position", position).putExtra("type",
-								EMMessage.Type.VIDEO.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+								EMMessage.Type.VIDEO.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);*/
 				return true;
 			}
 		});
