@@ -1,5 +1,7 @@
 package doext.implement;
 
+import org.json.JSONObject;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +18,8 @@ import com.easemob.chat.EMMessage.Type;
 import com.easemob.util.NetUtils;
 
 import core.DoServiceContainer;
+import core.helper.DoJsonHelper;
 import core.helper.DoResourcesHelper;
-import core.helper.jsonparse.DoJsonNode;
 import core.interfaces.DoIModuleTypeID;
 import core.interfaces.DoIScriptEngine;
 import core.object.DoInvokeResult;
@@ -55,7 +57,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	 * @_invokeResult 用于返回方法结果对象
 	 */
 	@Override
-	public boolean invokeSyncMethod(String _methodName, DoJsonNode _dictParas,
+	public boolean invokeSyncMethod(String _methodName, JSONObject _dictParas,
 			DoIScriptEngine _scriptEngine, DoInvokeResult _invokeResult)
 			throws Exception {
 		if("enterChat".equals(_methodName)){
@@ -82,7 +84,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	 * 获取DoInvokeResult对象方式new DoInvokeResult(this.getUniqueKey());
 	 */
 	@Override
-	public boolean invokeAsyncMethod(String _methodName, DoJsonNode _dictParas,
+	public boolean invokeAsyncMethod(String _methodName, JSONObject _dictParas,
 			DoIScriptEngine _scriptEngine, String _callbackFuncName)throws Exception {
 		if("login".equals(_methodName)){
 			login(_dictParas, _scriptEngine, _callbackFuncName);
@@ -98,12 +100,12 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	 * @_invokeResult 用于返回方法结果对象
 	 */
 	@Override
-	public void enterChat(DoJsonNode _dictParas, DoIScriptEngine _scriptEngine,
+	public void enterChat(JSONObject _dictParas, DoIScriptEngine _scriptEngine,
 			DoInvokeResult _invokeResult) throws Exception {
-		String userId = _dictParas.getOneText("username", "");
-		String userNickname = _dictParas.getOneText("userNickname", "");
-		String userIcon = _dictParas.getOneText("userIcon", "");
-		String myIcon = _dictParas.getOneText("myIcon", "");
+		String userId = DoJsonHelper.getString(_dictParas, "username", "");
+		String userNickname = DoJsonHelper.getString(_dictParas, "userNickname", "");
+		String userIcon = DoJsonHelper.getString(_dictParas, "userIcon", "");
+		String myIcon = DoJsonHelper.getString(_dictParas, "myIcon", "");
 		String loginUserId = do_HuanXinIM_App.getInstance().getLoginUserId();
 		do_HuanXinIM_App.getInstance().putUserInfo(loginUserId, new User(loginUserId,myIcon));
 		do_HuanXinIM_App.getInstance().putUserInfo(userId, new User(userId,userIcon));
@@ -122,18 +124,18 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	 * @_callbackFuncName 回调函数名
 	 */
 	@Override
-	public void login(DoJsonNode _dictParas, final DoIScriptEngine _scriptEngine,final String _callbackFuncName) throws Exception {
-		final String username = _dictParas.getOneText("username", "");
-		String password = _dictParas.getOneText("password", "");
+	public void login(JSONObject _dictParas, final DoIScriptEngine _scriptEngine,final String _callbackFuncName) throws Exception {
+		final String username = DoJsonHelper.getString(_dictParas, "username", "");
+		String password = DoJsonHelper.getString(_dictParas, "password", "");
 		final DoInvokeResult invokeResult = new DoInvokeResult(getUniqueKey());
-    	final DoJsonNode jsonNode = new DoJsonNode();
+    	final JSONObject jsonNode = new JSONObject();
 		EMChatManager.getInstance().login(username, password, new EMCallBack() {
 		    @Override
 		    public void onSuccess() {
 		    	try {
 		    		do_HuanXinIM_App.getInstance().setLoginUserId(username);
-		    		jsonNode.setOneInteger("state", 0);
-			    	jsonNode.setOneText("message", "success");
+		    		jsonNode.put("state", 0);
+			    	jsonNode.put("message", "success");
 					invokeResult.setResultNode(jsonNode);
 					_scriptEngine.callback(_callbackFuncName, invokeResult);
 				} catch (Exception e) {
@@ -149,8 +151,8 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 		    @Override
 		    public void onError(int code, String message) {
 		    	try {
-		    		jsonNode.setOneInteger("state", 1);
-			    	jsonNode.setOneText("message", "onError#code:" + code + "message:" + message);
+		    		jsonNode.put("state", 1);
+			    	jsonNode.put("message", "onError#code:" + code + "message:" + message);
 					invokeResult.setResultNode(jsonNode);
 					_scriptEngine.callback(_callbackFuncName, invokeResult);
 				} catch (Exception e) {
@@ -168,7 +170,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	 * @_invokeResult 用于返回方法结果对象
 	 */
 	@Override
-	public void logout(DoJsonNode _dictParas, DoIScriptEngine _scriptEngine,
+	public void logout(JSONObject _dictParas, DoIScriptEngine _scriptEngine,
 			DoInvokeResult _invokeResult) throws Exception {
 		EMChatManager.getInstance().logout();
 	}
@@ -212,12 +214,12 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	        }
 			try {
 				DoInvokeResult invokeResult = new DoInvokeResult(getUniqueKey());
-				DoJsonNode jsonNode = new DoJsonNode();
-				jsonNode.setOneText("from", message.getFrom());
-				jsonNode.setOneText("nick", message.getStringAttribute("nick",""));
-				jsonNode.setOneText("type", message.getType().toString());
-				jsonNode.setOneText("message", ticker);
-				jsonNode.setOneText("time", message.getMsgTime()+"");
+				JSONObject jsonNode = new JSONObject();
+				jsonNode.put("from", message.getFrom());
+				jsonNode.put("nick", message.getStringAttribute("nick",""));
+				jsonNode.put("type", message.getType().toString());
+				jsonNode.put("message", ticker);
+				jsonNode.put("time", message.getMsgTime()+"");
 				invokeResult.setResultNode(jsonNode);
 				getEventCenter().fireEvent("receive", invokeResult);
 			} catch (Exception e) {
@@ -236,8 +238,8 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 		public void onConnected() {
 	    	try {
 	    		DoInvokeResult jsonResult = new DoInvokeResult(getUniqueKey());
-				DoJsonNode jsonNode = new DoJsonNode();
-				jsonNode.setOneInteger("state", 0);
+	    		JSONObject jsonNode = new JSONObject();
+				jsonNode.put("state", 0);
 				getEventCenter().fireEvent("connection", jsonResult);
 			} catch (Exception e) {
 				DoServiceContainer.getLogEngine().writeError("IM连接监听发生错误", e);
@@ -248,16 +250,16 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 		public void onDisconnected(final int error) {
 			try {
 	    		DoInvokeResult jsonResult = new DoInvokeResult(getUniqueKey());
-				DoJsonNode jsonNode = new DoJsonNode();
+	    		JSONObject jsonNode = new JSONObject();
 				if(error == EMError.USER_REMOVED){
-					jsonNode.setOneInteger("state", 1);//显示帐号已经被移除
+					jsonNode.put("state", 1);//显示帐号已经被移除
 				} else if (error == EMError.CONNECTION_CONFLICT) {
-					jsonNode.setOneInteger("state", 2);//显示帐号在其他设备登陆
+					jsonNode.put("state", 2);//显示帐号在其他设备登陆
 				} else{
 					if (NetUtils.hasNetwork(mContext)){
-						jsonNode.setOneInteger("state", 3);//连接不到聊天服务器
+						jsonNode.put("state", 3);//连接不到聊天服务器
 					}else{
-						jsonNode.setOneInteger("state", 4);//当前网络不可用 请检查网络设置
+						jsonNode.put("state", 4);//当前网络不可用 请检查网络设置
 					}
 				}
 				jsonResult.setResultNode(jsonNode);
