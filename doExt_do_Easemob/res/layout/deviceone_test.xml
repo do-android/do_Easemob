@@ -5,11 +5,11 @@
 
     <FrameLayout
         android:id="@+id/header"
-        android:padding="10dip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@drawable/yellow" >
+        android:background="@drawable/yellow"
+        android:padding="10dip" >
 
         <TextView
             android:layout_width="match_parent"
@@ -32,13 +32,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="@drawable/blue"
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="10dip"
-        android:orientation="horizontal" >
+        android:background="@drawable/blue"
+        android:orientation="horizontal"
+        android:padding="10dip" >
 
         <Button
             android:id="@+id/btn_properties"
@@ -48,13 +48,27 @@
             android:onClick="doTestProperties"
             android:text="测试属性" />
 
-        <Button
-            android:id="@+id/btn_method"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="doTestMethod"
-            android:text="测试方法" />
+            android:orientation="vertical"
+            android:padding="10dip" >
+
+            <Button
+                android:id="@+id/btn_method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="dologin"
+                android:text="dologin" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="dologout"
+                android:text="dologout" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_event"

@@ -20,6 +20,7 @@ import com.easemob.util.NetUtils;
 import core.DoServiceContainer;
 import core.helper.DoJsonHelper;
 import core.helper.DoResourcesHelper;
+import core.interfaces.DoBaseActivityListener;
 import core.interfaces.DoIModuleTypeID;
 import core.interfaces.DoIScriptEngine;
 import core.object.DoInvokeResult;
@@ -37,7 +38,7 @@ import doext.easemob.util.CommonUtils;
  * 参数解释：@_messageName字符串事件名称，@jsonResult传递事件参数对象；
  * 获取DoInvokeResult对象方式new DoInvokeResult(this.getUniqueKey());
  */
-public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinIM_IMethod{
+public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinIM_IMethod,DoBaseActivityListener{
 	
 	private Context mContext;
 	
@@ -180,7 +181,6 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
 		intentFilter.setPriority(3);
 		mContext.registerReceiver(msgReceiver, intentFilter);
-		EMChat.getInstance().setAppInited();
 	}
 	
 	/**
@@ -191,7 +191,6 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
 	    	
-	    	//abortBroadcast();
 	        //消息id
 	        String msgId = intent.getStringExtra("msgid");
 	        //发消息的人的username(userid)
@@ -225,6 +224,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			abortBroadcast();
 	    }
 	}
 	
@@ -268,5 +268,28 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 				DoServiceContainer.getLogEngine().writeError("IM连接监听发生错误", e);
 			}
 		}
+	}
+
+	@Override
+	public void onResume() {
+		EMChat.getInstance().setAppInited();
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRestart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		
 	}
 }
