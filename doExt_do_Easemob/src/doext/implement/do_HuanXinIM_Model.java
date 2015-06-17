@@ -119,6 +119,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 		chat.putExtra("userId", userId);
 		chat.putExtra("userNick", userNick);
 		chat.putExtra("selfNick", selfNick);
+		chat.putExtra("selfIcon", selfIcon);
 		chat.putExtra("tag", tag);
 		chat.setClass(mContext, ChatActivity.class);
 		String paramContent = "userId:" + userId + ",userNick:" + userNick

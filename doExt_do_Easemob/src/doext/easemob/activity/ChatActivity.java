@@ -179,6 +179,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	public String playMsgId;
 	private String showNickName;
 	private String selfNick;
+	private String selfIcon;
 	private String customDataTag;
 
 	private Handler micImageHandler = new Handler() {
@@ -313,6 +314,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			toChatUsername = getIntent().getStringExtra("userId");
 			showNickName = getIntent().getStringExtra("userNick");
 			selfNick = getIntent().getStringExtra("selfNick");
+			selfIcon = getIntent().getStringExtra("selfIcon");
 			customDataTag = getIntent().getStringExtra("tag");
 			((TextView) findViewById(DoResourcesHelper.getIdentifier("name","id",this))).setText(showNickName);
 			// conversation =
@@ -639,6 +641,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 		if (content.length() > 0) {
 			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+			message.setAttribute("icon", selfIcon);
 			message.setAttribute("nick", selfNick);
 			message.setAttribute("tag", customDataTag);
 			// 如果是群聊，设置chattype,默认是单聊
