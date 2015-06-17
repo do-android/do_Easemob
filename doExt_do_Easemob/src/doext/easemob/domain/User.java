@@ -20,7 +20,9 @@ public class User extends EMContact {
 	private String header;
 	private String avatar;
 	
-	public User(){}
+	public User(){
+		
+	}
 	
 	public User(String username){
 	    this.username = username;

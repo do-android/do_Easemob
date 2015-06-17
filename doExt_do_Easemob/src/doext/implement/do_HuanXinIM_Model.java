@@ -22,6 +22,7 @@ import core.helper.DoJsonHelper;
 import core.helper.DoResourcesHelper;
 import core.interfaces.DoBaseActivityListener;
 import core.interfaces.DoIModuleTypeID;
+import core.interfaces.DoIPageView;
 import core.interfaces.DoIScriptEngine;
 import core.object.DoInvokeResult;
 import core.object.DoSingletonModule;
@@ -45,6 +46,8 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	public do_HuanXinIM_Model() throws Exception {
 		super();
 		this.mContext = DoServiceContainer.getPageViewFactory().getAppContext();
+		DoIPageView doIPageView = (DoIPageView) mContext;
+		doIPageView.setBaseActivityListener(this);
 		registerNewMessageReceiver();
 		// 注册一个监听连接状态的listener
 		EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
@@ -103,17 +106,25 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	@Override
 	public void enterChat(JSONObject _dictParas, DoIScriptEngine _scriptEngine,
 			DoInvokeResult _invokeResult) throws Exception {
-		String userId = DoJsonHelper.getString(_dictParas, "username", "");
-		String userNickname = DoJsonHelper.getString(_dictParas, "userNickname", "");
+		String userId = DoJsonHelper.getString(_dictParas, "userID", "");
+		String userNick = DoJsonHelper.getString(_dictParas, "userNick", "");
 		String userIcon = DoJsonHelper.getString(_dictParas, "userIcon", "");
-		String myIcon = DoJsonHelper.getString(_dictParas, "myIcon", "");
+		String selfNick = DoJsonHelper.getString(_dictParas, "selfNick", "");
+		String selfIcon = DoJsonHelper.getString(_dictParas, "selfIcon", "");
+		String tag = DoJsonHelper.getString(_dictParas, "tag", "");
 		String loginUserId = do_HuanXinIM_App.getInstance().getLoginUserId();
-		do_HuanXinIM_App.getInstance().putUserInfo(loginUserId, new User(loginUserId,myIcon));
-		do_HuanXinIM_App.getInstance().putUserInfo(userId, new User(userId,userIcon));
+		do_HuanXinIM_App.getInstance().putUserInfo(loginUserId, new User(loginUserId, selfIcon));
+		do_HuanXinIM_App.getInstance().putUserInfo(userId, new User(userId, userIcon));
 		Intent chat = new Intent();
 		chat.putExtra("userId", userId);
-		chat.putExtra("userNickname", userNickname);
+		chat.putExtra("userNick", userNick);
+		chat.putExtra("selfNick", selfNick);
+		chat.putExtra("tag", tag);
 		chat.setClass(mContext, ChatActivity.class);
+		String paramContent = "userId:" + userId + ",userNick:" + userNick
+				+ ",userIcon:" + userIcon + ",selfNick:" + selfNick + ",selfIcon:"
+				+ selfIcon + ",tag:" + tag;
+		DoServiceContainer.getLogEngine().writeInfo("easemob -> enterChat", paramContent);
 		mContext.startActivity(chat);
 	}
 
@@ -214,11 +225,13 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 			try {
 				DoInvokeResult invokeResult = new DoInvokeResult(getUniqueKey());
 				JSONObject jsonNode = new JSONObject();
-				jsonNode.put("from", message.getFrom());
-				jsonNode.put("nick", message.getStringAttribute("nick",""));
+				jsonNode.put("from", message.getFrom());//会话用户ID
+				jsonNode.put("nick", message.getStringAttribute("nick",""));//会话用户昵称
+				jsonNode.put("icon", message.getStringAttribute("icon", ""));//会话用户头像
 				jsonNode.put("type", message.getType().toString());
 				jsonNode.put("message", ticker);
 				jsonNode.put("time", message.getMsgTime()+"");
+				jsonNode.put("tag", message.getStringAttribute("tag", ""));//自定义文本
 				invokeResult.setResultNode(jsonNode);
 				getEventCenter().fireEvent("receive", invokeResult);
 			} catch (Exception e) {
@@ -277,19 +290,16 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onRestart() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		
 	}
 }
