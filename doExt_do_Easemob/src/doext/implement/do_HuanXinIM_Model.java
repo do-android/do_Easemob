@@ -42,6 +42,7 @@ import doext.easemob.util.CommonUtils;
 public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinIM_IMethod,DoBaseActivityListener{
 	
 	private Context mContext;
+	private NewMessageBroadcastReceiver msgReceiver;
 	
 	public do_HuanXinIM_Model() throws Exception {
 		super();
@@ -189,7 +190,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	}
 	
 	private void registerNewMessageReceiver(){
-		NewMessageBroadcastReceiver msgReceiver = new NewMessageBroadcastReceiver();
+		msgReceiver = new NewMessageBroadcastReceiver();
 		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
 		intentFilter.setPriority(3);
 		mContext.registerReceiver(msgReceiver, intentFilter);
@@ -238,7 +239,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			abortBroadcast();
+			//abortBroadcast();
 	    }
 	}
 	
@@ -281,6 +282,16 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 			} catch (Exception e) {
 				DoServiceContainer.getLogEngine().writeError("IM连接监听发生错误", e);
 			}
+		}
+	}
+	
+	
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if(msgReceiver != null){
+			mContext.unregisterReceiver(msgReceiver);
 		}
 	}
 
