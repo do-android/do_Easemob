@@ -39,7 +39,6 @@ public class UserUtils {
     public static void setUserAvatar(Context context, String username, ImageView imageView){
         User user = getUserInfo(username);
         if(user != null){
-        	DoServiceContainer.getLogEngine().writeInfo("setUserAvatar", "icon:" + user.getAvatar());
             Picasso.with(context).load(user.getAvatar()).placeholder(DoResourcesHelper.getRIdByDrawable("default_avatar", do_HuanXinIM_App.getInstance().getModuleTypeID())).into(imageView);
         }else{
             Picasso.with(context).load(DoResourcesHelper.getRIdByDrawable("default_avatar", do_HuanXinIM_App.getInstance().getModuleTypeID())).into(imageView);

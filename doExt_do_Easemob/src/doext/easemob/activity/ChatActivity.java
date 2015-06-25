@@ -82,7 +82,10 @@ import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
 
+import core.DoServiceContainer;
 import core.helper.DoResourcesHelper;
+import core.object.DoInvokeResult;
+import core.object.DoSingletonModule;
 import doext.easemob.adapter.ExpressionAdapter;
 import doext.easemob.adapter.ExpressionPagerAdapter;
 import doext.easemob.adapter.MessageAdapter;
@@ -678,6 +681,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		}
 		try {
 			final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
+			message.setAttribute("icon", selfIcon);
+			message.setAttribute("nick", selfNick);
+			message.setAttribute("tag", customDataTag);
 			// 如果是群聊，设置chattype,默认是单聊
 			if (chatType == CHATTYPE_GROUP)
 				message.setChatType(ChatType.GroupChat);
@@ -706,6 +712,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		String to = toChatUsername;
 		// create and add image message in view
 		final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
+		message.setAttribute("icon", selfIcon);
+		message.setAttribute("nick", selfNick);
+		message.setAttribute("tag", customDataTag);
 		// 如果是群聊，设置chattype,默认是单聊
 		if (chatType == CHATTYPE_GROUP)
 			message.setChatType(ChatType.GroupChat);
@@ -1259,6 +1268,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			deliveryAckMessageReceiver = null;
 		} catch (Exception e) {
 		}
+		fireChatStatusChanged(0);//离开
 	}
 
 	@Override
@@ -1267,6 +1277,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		if(group != null)
 			((TextView) findViewById(DoResourcesHelper.getIdentifier("name","id",this))).setText(group.getGroupName());
 		adapter.refresh();
+		fireChatStatusChanged(1);//进入
 	}
 
 	@Override
@@ -1287,6 +1298,14 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			}
 		} catch (Exception e) {
 		}
+	}
+	
+	public void fireChatStatusChanged(int status){
+		String uniqueKey = getIntent().getStringExtra("uniqueKey");
+		DoSingletonModule module = DoServiceContainer.getSingletonModuleFactory().getSingletonModuleAddress(uniqueKey);
+		DoInvokeResult jsonResult = new DoInvokeResult(uniqueKey);
+		jsonResult.setResultInteger(status);
+		module.getEventCenter().fireEvent("chatStatusChanged", jsonResult);
 	}
 
 	/**

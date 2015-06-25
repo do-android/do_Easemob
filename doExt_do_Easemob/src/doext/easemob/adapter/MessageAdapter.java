@@ -353,7 +353,7 @@ public class MessageAdapter extends BaseAdapter implements DoIModuleTypeID{
 				}
 			}
 		}
-		
+		holder.iv_avatar.setImageResource(DoResourcesHelper.getIdentifier("default_avatar", "drawable", this));
 		//设置用户头像
 		setUserAvatar(message, holder.iv_avatar);
 

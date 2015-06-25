@@ -121,12 +121,13 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 		chat.putExtra("userNick", userNick);
 		chat.putExtra("selfNick", selfNick);
 		chat.putExtra("selfIcon", selfIcon);
+		chat.putExtra("uniqueKey", getUniqueKey());
 		chat.putExtra("tag", tag);
 		chat.setClass(mContext, ChatActivity.class);
 		String paramContent = "userId:" + userId + ",userNick:" + userNick
 				+ ",userIcon:" + userIcon + ",selfNick:" + selfNick + ",selfIcon:"
 				+ selfIcon + ",tag:" + tag;
-		DoServiceContainer.getLogEngine().writeInfo("easemob -> enterChat", paramContent);
+		//DoServiceContainer.getLogEngine().writeInfo("easemob -> enterChat", paramContent);
 		mContext.startActivity(chat);
 	}
 
