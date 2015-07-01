@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.doext.module.frame.debug.DoService;
 
@@ -29,6 +30,10 @@ public class DoTestEasemobActivity extends DoTestActivity{
 		_paras_chat.put("username", "heping");
 		DoService.syncMethod(this.model, "enterChat", _paras_chat);*/
 	}
+	
+	public void dologin(View view){
+		doTestAsyncMethod();
+	}
 
 	@Override
 	protected void doTestAsyncMethod() {
@@ -41,8 +46,9 @@ public class DoTestEasemobActivity extends DoTestActivity{
 			public void eventCallBack(String _data) {
 				DoServiceContainer.getLogEngine().writeDebug("IMLogin：" + _data);
 				Map<String, String>  _paras_chat = new HashMap<String, String>();
-				_paras_chat.put("username", "heping");
-				_paras_chat.put("userNickname", "zhuozuoying");
+				_paras_chat.put("userID", "heping");
+				_paras_chat.put("userNick", "HP");
+				_paras_chat.put("selfNick", "ZZY");
 				//_paras_chat.put("userIcon", "http://downloads.easemob.com/downloads/57.png");
 				//_paras_chat.put("myIcon", "http://zhouzhou.dcdmt.cn/files/UploadImage/20150508/5de7e1c345a44ebeb2c2e9e60de14a2a.jpg");
 				DoService.syncMethod(model, "enterChat", _paras_chat);
