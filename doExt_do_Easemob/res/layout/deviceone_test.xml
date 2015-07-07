@@ -68,6 +68,7 @@
                 android:layout_weight="1"
                 android:onClick="dologout"
                 android:text="dologout" />
+            
         </LinearLayout>
 
         <Button

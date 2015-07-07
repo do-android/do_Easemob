@@ -68,6 +68,7 @@ public class DoService {
              DoServiceContainer.getLogEngine().writeDebug("调用异步方法：" + _methodName );
          } catch (Exception _err){
              DoServiceContainer.getLogEngine().writeError("调用异步方法失败：" + _methodName, _err);
+             _err.printStackTrace();
          }
      }
 

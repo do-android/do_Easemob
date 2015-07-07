@@ -52,6 +52,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 		registerNewMessageReceiver();
 		// 注册一个监听连接状态的listener
 		EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
+		
 	}
 	
 	/**
@@ -92,6 +93,7 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	public boolean invokeAsyncMethod(String _methodName, JSONObject _dictParas,
 			DoIScriptEngine _scriptEngine, String _callbackFuncName)throws Exception {
 		if("login".equals(_methodName)){
+			EMChatManager.getInstance().logout();//防止用户非正常退出，例如：直接杀死应用导致环信IM无法正常退出；
 			login(_dictParas, _scriptEngine, _callbackFuncName);
 			return true;
 		}

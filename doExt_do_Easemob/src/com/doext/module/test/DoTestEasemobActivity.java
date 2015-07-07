@@ -31,6 +31,11 @@ public class DoTestEasemobActivity extends DoTestActivity{
 		DoService.syncMethod(this.model, "enterChat", _paras_chat);*/
 	}
 	
+	public void dologout(View view){
+		DoService.syncMethod(this.model, "logout", new HashMap<String, String>());
+	}
+	
+	
 	public void dologin(View view){
 		doTestAsyncMethod();
 	}

@@ -646,6 +646,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
 			message.setAttribute("icon", selfIcon);
 			message.setAttribute("nick", selfNick);
+			message.setAttribute("uniqueKey", getIntent().getStringExtra("uniqueKey"));
+			message.setAttribute("userNick", showNickName);
 			message.setAttribute("tag", customDataTag);
 			// 如果是群聊，设置chattype,默认是单聊
 			if (chatType == CHATTYPE_GROUP)
@@ -683,6 +685,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.VOICE);
 			message.setAttribute("icon", selfIcon);
 			message.setAttribute("nick", selfNick);
+			message.setAttribute("uniqueKey", getIntent().getStringExtra("uniqueKey"));
+			message.setAttribute("userNick", showNickName);
 			message.setAttribute("tag", customDataTag);
 			// 如果是群聊，设置chattype,默认是单聊
 			if (chatType == CHATTYPE_GROUP)
@@ -714,6 +718,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
 		message.setAttribute("icon", selfIcon);
 		message.setAttribute("nick", selfNick);
+		message.setAttribute("uniqueKey", getIntent().getStringExtra("uniqueKey"));
+		message.setAttribute("userNick", showNickName);
 		message.setAttribute("tag", customDataTag);
 		// 如果是群聊，设置chattype,默认是单聊
 		if (chatType == CHATTYPE_GROUP)
@@ -1016,7 +1022,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			// 记得把广播给终结掉
-			abortBroadcast();
+			//abortBroadcast();
 
 			String username = intent.getStringExtra("from");
 			String msgid = intent.getStringExtra("msgid");

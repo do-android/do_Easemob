@@ -7,13 +7,18 @@ import java.util.Map;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.OnNotificationClickListener;
 
 import core.interfaces.DoIAppDelegate;
+import doext.easemob.activity.ChatActivity;
 import doext.easemob.domain.User;
 
 /**
@@ -65,16 +70,41 @@ public class do_HuanXinIM_App implements DoIAppDelegate {
 		EMChat.getInstance().init(currentContext);
 		// 获取到EMChatOptions对象
 		EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+		//设置notification点击listener
+		options.setOnNotificationClickListener(new OnNotificationClickListener() {
+
+			@Override
+			public Intent onNotificationClick(EMMessage message) {
+				Intent intent = new Intent(currentContext, ChatActivity.class);
+				ChatType chatType = message.getChatType();
+				if(chatType == ChatType.Chat){ //单聊信息
+					intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+					intent.putExtra("userId", message.getFrom());
+					intent.putExtra("userNick", message.getStringAttribute("userNick", ""));
+					intent.putExtra("selfNick", message.getStringAttribute("nick",""));
+					intent.putExtra("selfIcon", message.getStringAttribute("icon", ""));
+					intent.putExtra("uniqueKey", message.getStringAttribute("uniqueKey", ""));
+					intent.putExtra("tag", message.getStringAttribute("tag", ""));
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+				}else{ //群聊信息
+					//message.getTo()为群聊id
+					intent.putExtra("groupId", message.getTo());
+					intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+				}
+				return intent;
+			}
+		});
 		// 默认添加好友时，是不需要验证的，改成需要验证
 		options.setAcceptInvitationAlways(false);
 		// 设置收到消息是否有新消息通知，默认为true
-		options.setNotificationEnable(false);
+		//options.setNotificationEnable(false);
 		// 设置收到消息是否有声音提示，默认为true
-		options.setNoticeBySound(true);
+		//options.setNoticeBySound(true);
 		// 设置收到消息是否震动 默认为true
-		options.setNoticedByVibrate(true);
+		//options.setNoticedByVibrate(true);
 		// 设置语音消息播放是否设置为扬声器播放 默认为true
 		options.setUseSpeaker(true);
+		
 		return true;
 	}
 

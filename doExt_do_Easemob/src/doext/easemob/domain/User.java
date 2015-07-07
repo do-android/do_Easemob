@@ -79,4 +79,5 @@ public class User extends EMContact {
 	public String toString() {
 		return nick == null ? username : nick;
 	}
+
 }
