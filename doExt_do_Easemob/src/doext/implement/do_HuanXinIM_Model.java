@@ -24,6 +24,7 @@ import core.interfaces.DoBaseActivityListener;
 import core.interfaces.DoIModuleTypeID;
 import core.interfaces.DoIPageView;
 import core.interfaces.DoIScriptEngine;
+import core.object.DoEventCenter;
 import core.object.DoInvokeResult;
 import core.object.DoSingletonModule;
 import doext.app.do_HuanXinIM_App;
@@ -258,7 +259,10 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 	    		DoInvokeResult jsonResult = new DoInvokeResult(getUniqueKey());
 	    		JSONObject jsonNode = new JSONObject();
 				jsonNode.put("state", 0);
-				getEventCenter().fireEvent("connection", jsonResult);
+				DoEventCenter event = getEventCenter();
+				if(event != null){
+					event.fireEvent("connection", jsonResult);
+				}
 			} catch (Exception e) {
 				DoServiceContainer.getLogEngine().writeError("IM连接监听发生错误", e);
 			}
@@ -281,7 +285,10 @@ public class do_HuanXinIM_Model extends DoSingletonModule implements do_HuanXinI
 					}
 				}
 				jsonResult.setResultNode(jsonNode);
-				getEventCenter().fireEvent("connection", jsonResult);
+				DoEventCenter event = getEventCenter();
+				if(event != null){
+					event.fireEvent("connection", jsonResult);
+				}
 			} catch (Exception e) {
 				DoServiceContainer.getLogEngine().writeError("IM连接监听发生错误", e);
 			}

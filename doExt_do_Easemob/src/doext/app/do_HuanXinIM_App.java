@@ -5,9 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.util.Log;
 
 import com.easemob.chat.EMChat;
@@ -17,6 +22,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.OnNotificationClickListener;
 
+import core.DoServiceContainer;
 import core.interfaces.DoIAppDelegate;
 import doext.easemob.activity.ChatActivity;
 import doext.easemob.domain.User;
@@ -75,9 +81,11 @@ public class do_HuanXinIM_App implements DoIAppDelegate {
 
 			@Override
 			public Intent onNotificationClick(EMMessage message) {
-				Intent intent = new Intent(currentContext, ChatActivity.class);
-				ChatType chatType = message.getChatType();
-				if(chatType == ChatType.Chat){ //单聊信息
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				//Intent intent = new Intent();
+				//Intent intent = new Intent(currentContext, ChatActivity.class);
+				//ChatType chatType = message.getChatType();
+				/*if(chatType == ChatType.Chat){ //单聊信息
 					intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
 					intent.putExtra("userId", message.getFrom());
 					intent.putExtra("userNick", message.getStringAttribute("userNick", ""));
@@ -90,6 +98,27 @@ public class do_HuanXinIM_App implements DoIAppDelegate {
 					//message.getTo()为群聊id
 					intent.putExtra("groupId", message.getTo());
 					intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+				}*/
+				try {
+					Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+			    	resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+			    	resolveIntent.setPackage(currentContext.getPackageName());
+					List<ResolveInfo> apps = currentContext.getPackageManager().queryIntentActivities(resolveIntent, 0);
+					if(apps.size() == 0){
+						return intent;
+					}
+			    	ResolveInfo ri = apps.iterator().next();
+			    	String packageName = ri.activityInfo.packageName;
+			    	String className = ri.activityInfo.name;
+			    	ComponentName cn = new ComponentName(packageName, className);
+			    	
+			    	intent.addCategory(Intent.CATEGORY_LAUNCHER);
+			    	intent.setComponent(cn);
+			    	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			    	intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return intent;
 			}
