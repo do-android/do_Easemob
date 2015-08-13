@@ -5,13 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.util.Log;
 
@@ -19,12 +16,9 @@ import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.OnNotificationClickListener;
 
-import core.DoServiceContainer;
 import core.interfaces.DoIAppDelegate;
-import doext.easemob.activity.ChatActivity;
 import doext.easemob.domain.User;
 
 /**
@@ -112,7 +106,7 @@ public class do_HuanXinIM_App implements DoIAppDelegate {
 			    	String className = ri.activityInfo.name;
 			    	ComponentName cn = new ComponentName(packageName, className);
 			    	
-			    	intent.addCategory(Intent.CATEGORY_LAUNCHER);
+			    	//intent.addCategory(Intent.CATEGORY_LAUNCHER);
 			    	intent.setComponent(cn);
 			    	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -178,6 +172,12 @@ public class do_HuanXinIM_App implements DoIAppDelegate {
 
 	public String getModuleTypeID() {
 		return "do_HuanXinIM";
+	}
+
+	@Override
+	public String getTypeID() {
+		// TODO Auto-generated method stub
+		return getModuleTypeID();
 	}
 
 }
