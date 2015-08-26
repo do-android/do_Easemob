@@ -784,18 +784,18 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			cursor = null;
 
 			if (picturePath == null || picturePath.equals("null")) {
-				Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
+				//Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
+				//toast.setGravity(Gravity.CENTER, 0, 0);
+				//toast.show();
 				return;
 			}
 			sendPicture(picturePath);
 		} else {
 			File file = new File(selectedImage.getPath());
 			if (!file.exists()) {
-				Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
+				//Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
+				//toast.setGravity(Gravity.CENTER, 0, 0);
+				//toast.show();
 				return;
 
 			}
