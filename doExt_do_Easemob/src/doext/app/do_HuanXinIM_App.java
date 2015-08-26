@@ -105,10 +105,8 @@ public class do_HuanXinIM_App implements DoIAppDelegate {
 			    	String packageName = ri.activityInfo.packageName;
 			    	String className = ri.activityInfo.name;
 			    	ComponentName cn = new ComponentName(packageName, className);
-			    	
-			    	//intent.addCategory(Intent.CATEGORY_LAUNCHER);
+			    	intent.addCategory(Intent.CATEGORY_LAUNCHER);
 			    	intent.setComponent(cn);
-			    	intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			    	intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 				} catch (Exception e) {
