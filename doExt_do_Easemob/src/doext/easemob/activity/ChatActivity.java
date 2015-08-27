@@ -200,6 +200,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		setContentView(DoResourcesHelper.getIdentifier("activity_chat","layout",this));
 		initView();
 		setUpView();
+		fireChatStatusChanged(1);//进入
 	}
 
 	/**
@@ -784,18 +785,18 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			cursor = null;
 
 			if (picturePath == null || picturePath.equals("null")) {
-				//Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
-				//toast.setGravity(Gravity.CENTER, 0, 0);
-				//toast.show();
+				Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
 				return;
 			}
 			sendPicture(picturePath);
 		} else {
 			File file = new File(selectedImage.getPath());
 			if (!file.exists()) {
-				//Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
-				//toast.setGravity(Gravity.CENTER, 0, 0);
-				//toast.show();
+				Toast toast = Toast.makeText(this, st8, Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
 				return;
 
 			}
@@ -1283,7 +1284,6 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		if(group != null)
 			((TextView) findViewById(DoResourcesHelper.getIdentifier("name","id",this))).setText(group.getGroupName());
 		adapter.refresh();
-		fireChatStatusChanged(1);//进入
 	}
 
 	@Override
